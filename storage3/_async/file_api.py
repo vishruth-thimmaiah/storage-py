@@ -177,7 +177,7 @@ class AsyncBucketActionsMixin:
         )
         data = response.json()
         data["signedURL"] = (
-            f"{self._client.base_url}{cast(str, data['signedURL']).lstrip('/')}{download_query}"
+            f"{self._client.base_url}{urllib.parse.quote(cast(str, data['signedURL'])).lstrip('/')}{download_query}"
         )
         return data
 
@@ -213,7 +213,7 @@ class AsyncBucketActionsMixin:
         data = response.json()
         for item in data:
             item["signedURL"] = (
-                f"{self._client.base_url}{cast(str, item['signedURL']).lstrip('/')}{download_query}"
+                f"{self._client.base_url}{urllib.parse.quote(cast(str, item['signedURL'])).lstrip('/')}{download_query}"
             )
         return data
 
@@ -248,7 +248,7 @@ class AsyncBucketActionsMixin:
 
         query_string = "&".join(_query_string)
         query_string = f"?{query_string}"
-        _path = self._get_final_path(path)
+        _path = urllib.parse.quote(self._get_final_path(path))
         return f"{self._client.base_url}{render_path}/public/{_path}{query_string}"
 
     async def move(self, from_path: str, to_path: str) -> dict[str, str]:
